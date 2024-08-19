@@ -1,10 +1,13 @@
-<script setup>
+<script setup xmlns="http://www.w3.org/1999/html">
+import ChunkDownload from "@/components/ChunkDownload.vue";
 import Download from "@/components/Download.vue";
 </script>
 
 <template>
   <main>
-    <Download />
+    <ChunkDownload/>
+    <br>
+    <Download/>
   </main>
 </template>
 

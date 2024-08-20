@@ -1,8 +1,11 @@
 <script setup>
 import axios from "axios";
+import {ref} from "vue";
+
+const percentage = ref(0)
 
 const downloadFile = async () => {
-  const url = 'api/oss/object/preview/test/WebStorm-2024.1.5.exe';
+  const url = 'api/oss/object/preview/demo.zip';
   // 分段大小  5MB
   const chunkSize = 1024 * 1024 * 5;
   let start = 0;
@@ -24,7 +27,7 @@ const downloadFile = async () => {
   // 分段下载
   for (let i = 0; i < numChunks; i++) {
     const range = `bytes=${start}-${end}`;
-    console.log(`===============下载：${range}`);
+    console.log(`===============开始下载：${range}`);
     const config = {
       headers: {
         Range: range
@@ -35,6 +38,7 @@ const downloadFile = async () => {
     chunks.push(response.data);
     start = end + 1;
     end = Math.min(end + chunkSize, fileSize - 1);
+    percentage.value = Math.ceil((i + 1) * 100 / numChunks);
   }
 
   // Combine chunks into a single file
@@ -65,6 +69,21 @@ const getFileName = (contentDisposition) => {
 
 <template>
   <div>
-    <button @click="downloadFile">分片下载文件</button>
+    <el-button @click="downloadFile">分片下载文件</el-button>
+    <div v-if="percentage !== 0" class="demo-progress">
+      <el-progress :percentage="percentage"
+                   :text-inside="true"
+                   :stroke-width="24"
+                   striped-flow
+                   status="success"/>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.demo-progress .el-progress--line {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  max-width: 600px;
+}
+</style>

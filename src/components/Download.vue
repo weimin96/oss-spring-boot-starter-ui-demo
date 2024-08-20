@@ -11,6 +11,6 @@ const downloadFile = async () => {
 
 <template>
   <div>
-    <button @click="downloadFile">下载文件</button>
+    <el-button @click="downloadFile">下载文件</el-button>
   </div>
 </template>
